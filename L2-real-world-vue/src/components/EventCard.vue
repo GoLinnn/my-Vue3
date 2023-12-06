@@ -9,8 +9,8 @@
 export default {
   name: 'EventCard',
   props: {
-    event: Object
-  }
+    event: Object,
+  },
 }
 </script>
 

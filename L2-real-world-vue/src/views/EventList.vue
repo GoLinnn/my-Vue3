@@ -8,51 +8,28 @@
 <script>
 // @ is an alias to /src
 import EventCard from '@/components/EventCard.vue'
+import axios from 'axios'
 
 export default {
   name: 'HomeView',
   components: {
-    EventCard,
+    EventCard
   },
   data() {
     return {
-      events: [
-        {
-          id: 5928101,
-          category: 'animal welfare',
-          title: 'Cat Adoption Day',
-          description: 'Find your new feline friend at this event.',
-          location: 'Meow Town',
-          date: 'January 28, 2022',
-          time: '12:00',
-          petsAllowed: true,
-          organizer: 'Kat Laydee',
-        },
-        {
-          id: 5928102,
-          category: 'animal welfare',
-          title: 'Cat Adoption Day',
-          description: 'Find your new feline friend at this event.',
-          location: 'Meow Town',
-          date: 'January 28, 2022',
-          time: '12:00',
-          petsAllowed: true,
-          organizer: 'Kat Laydee',
-        },
-        {
-          id: 5928103,
-          category: 'animal welfare',
-          title: 'Cat Adoption Day',
-          description: 'Find your new feline friend at this event.',
-          location: 'Meow Town',
-          date: 'January 28, 2022',
-          time: '12:00',
-          petsAllowed: true,
-          organizer: 'Kat Laydee',
-        },
-      ],
+      events: null
     }
   },
+  created() {
+    axios
+      .get('https://my-json-server.typicode.com/GoLinnn/my-Vue3/events')
+      .then(res => {
+        this.events = res.data
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 }
 </script>
 <style scoped>

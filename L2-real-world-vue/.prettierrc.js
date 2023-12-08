@@ -3,4 +3,5 @@ module.exports = {
   singleQuote: true,
   // 行末分号, 默认true
   semi: false,
+  "endOfLine": "auto"//不让prettier检测文件每行结束的格式
 }

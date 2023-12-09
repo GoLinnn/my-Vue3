@@ -28,7 +28,18 @@ export default {
         this.event = res.data
       })
       .catch((err) => {
-        console.log(err)
+        if (err.response && err.response.status === 404) {
+          // 申请资源不存在，将event传递给相应的route，返回对应的错误页面
+          this.$router.push({
+            name: '404Resource',
+            params: { resource: 'event' },
+          })
+        } else {
+          // 网络错误
+          this.$router.push({
+            name: 'NetworkError',
+          })
+        }
       })
   },
 }

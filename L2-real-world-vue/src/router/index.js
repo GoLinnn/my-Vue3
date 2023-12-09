@@ -5,6 +5,8 @@ import EventDetails from '../views/Event/EventDetails.vue'
 import EventRegister from '../views/Event/EventRegister.vue'
 import EventEdit from '../views/Event/EventEdit.vue'
 import About from '../views/AboutView.vue'
+import NotFound from '../views/NotFound.vue'
+import NetworkError from '../views/NetworkError.vue'
 
 const routes = [
   {
@@ -15,7 +17,7 @@ const routes = [
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
   },
   {
-    path: '/event/:id',
+    path: '/events/:id',
     name: 'EventLayout',
     // 传入到router的参数作为组件的参数
     props: true,
@@ -39,6 +41,30 @@ const routes = [
     ],
   },
   {
+    // 重定向
+    //path: '/event/:id',
+    // 此方法不能解决nested route的重定向问题
+    // redirect: () => {
+    //   return { name: 'EventLayout' } // 自动传id参数
+    // },
+
+    // nested route 重定向方法一
+    // redirect: () => {
+    //   return { name: 'EventLayout' }
+    // },
+    // children: [
+    //   { path: 'register', redirect: () => ({ name: 'EventRegister' }) },
+    //   { path: 'edit', redirect: () => ({ name: 'EventEdit' }) },
+    // ],
+
+    // nested route 重定向方法二
+    // *. 用于匹配 /
+    path: '/event/:afterEvent(.*)',
+    redirect: (to) => {
+      return { path: '/events/' + to.params.afterEvent }
+    },
+  },
+  {
     path: '/about',
     name: 'about',
     // 优化
@@ -48,6 +74,22 @@ const routes = [
     // component: () =>
     //   import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
     component: About,
+  },
+  {
+    path: '/:catchAll(.*)', // 获取不匹配以上所有路径的路径，但是不包括/event/后的路径
+    name: 'NotFound',
+    component: NotFound,
+  },
+  {
+    path: '/404/:resource',
+    name: '404Resource',
+    component: NotFound,
+    props: true,
+  },
+  {
+    path: '/network-error',
+    name: 'NetworkError',
+    component: NetworkError,
   },
 ]
 

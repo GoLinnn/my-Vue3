@@ -46,10 +46,12 @@ export default {
         .then((response) => {
           this.events = response.data
           this.totalEvents = response.headers['x-total-count']
-          console.log(response)
         })
-        .catch((err) => {
-          console.log(err)
+        .catch(() => {
+          // 网络错误
+          this.$router.push({
+            name: 'NetworkError',
+          })
         })
     })
   },

@@ -25,7 +25,8 @@
 // @ is an alias to /src
 import EventCard from '@/components/EventCard.vue'
 import EventService from '@/services/EventService.js'
-import { watchEffect } from 'vue'
+// import { watchEffect } from 'vue'
+import NProgress from 'nprogress'
 
 export default {
   name: 'EventList',
@@ -39,21 +40,57 @@ export default {
       totalEvents: 0,
     }
   },
-  created() {
-    watchEffect(() => {
-      this.events = null
-      EventService.getEvents(2, this.page)
-        .then((response) => {
-          this.events = response.data
-          this.totalEvents = response.headers['x-total-count']
+  // created() {
+  //   watchEffect(() => {
+  //     this.events = null
+  //     EventService.getEvents(2, this.page)
+  //       .then((response) => {
+  //         this.events = response.data
+  //         this.totalEvents = response.headers['x-total-count']
+  //       })
+  //       .catch(() => {
+  //         // 网络错误
+  //         this.$router.push({
+  //           name: 'NetworkError',
+  //         })
+  //       })
+  //   })
+  // },
+  // 导航守卫
+  beforeRouteEnter(routeTo, routeFrom, next) {
+    NProgress.start()
+    EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
+      .then((response) => {
+        // 可以通过传一个回调给 next 来访问组件实例。在导航被确认的时候执行回调，并且把组件实例作为回调方法的参数
+        next((comp) => {
+          comp.events = response.data
+          comp.totalEvents = response.headers['x-total-count']
         })
-        .catch(() => {
-          // 网络错误
-          this.$router.push({
-            name: 'NetworkError',
-          })
-        })
-    })
+      })
+      .catch(() => {
+        // 网络错误
+        next({ name: 'NetworkError' })
+      })
+      .finally(() => {
+        NProgress.done()
+      })
+  },
+  beforeRouteUpdate(routeTo) {
+    NProgress.start()
+    EventService.getEvents(2, parseInt(routeTo.query.page) || 1)
+      .then((response) => {
+        // 可以访问this
+        this.events = response.data
+        this.totalEvents = response.headers['x-total-count']
+      })
+      .catch(() => {
+        // 网络错误
+        // 可以使用next，当没有next时可以直接return，效果一样
+        return { name: 'NetworkError' }
+      })
+      .finally(() => {
+        NProgress.done()
+      })
   },
   computed: {
     hasNextPage() {

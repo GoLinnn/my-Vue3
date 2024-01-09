@@ -16,9 +16,9 @@ export const useCounterStore = defineStore({
   },
   // 当数据改变时才会渲染更新页面，相当于computed
   getters: {
-    oddOreven(state) {
+    oddOreven() {
       // 此处count不用value
-      if (state.count % 2 === 0) return 'even'
+      if (this.count % 2 === 0) return 'even'
       else return 'odd'
     }
   }

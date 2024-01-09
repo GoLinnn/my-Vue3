@@ -11,6 +11,7 @@
   </div>
 </template>
 <script setup>
+// 导入组件
 import Counter from '@/components/Counter.vue'
 import { useCounterStore } from '@/stores/counter'
 const storeCounter = useCounterStore()

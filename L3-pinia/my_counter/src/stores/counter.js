@@ -1,12 +1,25 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
+export const useCounterStore = defineStore({
+  id: 'counter',
+  state: () => ({
+    count: 0
+  }),
+  // 方法要放到actions中
+  actions: {
+    increaseCount() {
+      this.count++
+    },
+    decreaseCount() {
+      this.count--
+    }
+  },
+  // 当数据改变时才会渲染更新页面，相当于computed
+  getters: {
+    oddOreven(state) {
+      // 此处count不用value
+      if (state.count % 2 === 0) return 'even'
+      else return 'odd'
+    }
   }
-
-  return { count, doubleCount, increment }
 })

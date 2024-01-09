@@ -1,34 +1,20 @@
 <template>
   <h3>Home</h3>
   <div class="counter">
-    {{ count }}
+    {{ storeCounter.count }}
   </div>
   <div class="buttons">
-    <button @click="decreaseCount">-</button>
-    <button @click="increaseCount">+</button>
+    <button @click="storeCounter.decreaseCount">-</button>
+    <button @click="storeCounter.increaseCount">+</button>
   </div>
   <hr>
   <div>
-    The number is {{ oddOreven }}
+    The number is {{ storeCounter.oddOreven }}
   </div>
 </template>
 <script setup>
-import { ref, computed } from 'vue'
-
-const count = ref(0)
-
-const increaseCount = () => {
-  // 在 JavaScript 中需要 .value
-  count.value++
-}
-const decreaseCount = () => {
-  // 在 JavaScript 中需要 .value
-  count.value--
-}
-const oddOreven = computed(() => {
-  if (count.value % 2 === 0) return 'even'
-  else return 'odd'
-})
+import { useCounterStore } from '@/stores/counter'
+const storeCounter = useCounterStore()
 </script>
 <style>
 .counter {
